@@ -34,7 +34,7 @@ namespace ViktorWatches
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(); services.AddRazorPages(); // добавено Razor Pages
             services.Configure<IdentityOptions>(option =>
             {
                 option.Password.RequireDigit = false;

@@ -12,6 +12,6 @@ namespace ViktorWatches.Domain
         [Required]
         [MinLength(30)]
         public string ManufacturerName { get; set; }
-        public virtual IEnumerable<Watch> Orders { get; set; } = new List<Watch>();
+        public virtual IEnumerable<Watch> Watches { get; set; } = new List<Watch>(); // поправено
     }
 }
