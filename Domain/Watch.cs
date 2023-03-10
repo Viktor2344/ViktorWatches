@@ -31,6 +31,7 @@ namespace ViktorWatches.Domain
         [Required]
         public decimal Price { get; set; }
         public decimal Discount { get; set; }
+        [Required]
         public virtual IEnumerable<Order> Orders { get; set; } = new List<Order>();
 
     }

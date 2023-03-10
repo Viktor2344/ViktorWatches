@@ -11,7 +11,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ViktorWatches.Abstraction;
 using ViktorWatches.Data;
+using ViktorWatches.Domain;
+using ViktorWatches.Infrastructure;
+using ViktorWatches.Services;
 
 namespace ViktorWatches
 {
@@ -28,12 +32,18 @@ namespace ViktorWatches
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+            options.UseLazyLoadingProxies()
+                .UseSqlServer(
+                    Configuration.GetConnectionString("DefaultConnection"))) ;
             services.AddDatabaseDeveloperPageExceptionFilter();
+            services.AddTransient<ICategoryService, CategoryService>();
+            services.AddTransient<IManufacturerService, ManufacturerService>();
 
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddDefaultIdentity<ApplicationUser>()
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
             services.AddControllersWithViews(); services.AddRazorPages(); // добавено Razor Pages
             services.Configure<IdentityOptions>(option =>
             {
@@ -52,6 +62,7 @@ namespace ViktorWatches
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.PrepareDatabase();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
